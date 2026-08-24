@@ -6,10 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/SecureDesk")
@@ -22,8 +19,13 @@ public class UserController {
     public String home(){
         return "Welcome Home, Create account to raise ticket!";
     }
+    //Can only be accessed by users
+    @GetMapping("/welcomeHome")
+    public String welcomeHome(){
+        return "Welcome Home, Raise, View, Update Tickets!";
+    }
     //Can be accessed by all
-    @GetMapping("/users/register")
+    @PostMapping("/users/register")
     public ResponseEntity<RegisterUserRequest> registerUser(@Valid @RequestBody RegisterUserRequest registerUserRequest){
         userService.registerUser(registerUserRequest);
         return new ResponseEntity<>(registerUserRequest, HttpStatus.CREATED);
