@@ -14,7 +14,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private final BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
     public void registerUser(RegisterUserRequest registerUserRequest){
