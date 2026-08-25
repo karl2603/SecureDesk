@@ -29,10 +29,20 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
+                        // Public endpoints, it can be accessed by all
                         .requestMatchers(
                                 "/SecureDesk/home",
                                 "/SecureDesk/users/register"
                         ).permitAll()
+
+                        // Admin-only endpoints, can only be accessed by admin
+                        .requestMatchers(
+                                "/SecureDesk/tickets",
+                                "/SecureDesk/tickets/active",
+                                "/SecureDesk/ticket/*/status"
+                        ).hasRole("ADMIN")
+
+                        // Everything else — user and admin can both access it
                         .anyRequest().hasAnyRole("USER", "ADMIN")
                 )
 
