@@ -2,6 +2,7 @@ package com.Karl.SecureDesk.service;
 
 import com.Karl.SecureDesk.dto.RegisterUserRequest;
 import com.Karl.SecureDesk.dto.TicketResponse;
+import com.Karl.SecureDesk.dto.UpdateTicketStatusRequest;
 import com.Karl.SecureDesk.entity.Ticket;
 import com.Karl.SecureDesk.entity.User;
 import com.Karl.SecureDesk.repository.TicketRepository;
@@ -43,5 +44,11 @@ public class UserService {
             response.add(ticketResponse);
         }
         return response;
+    }
+
+    public void resolveTicket(Long t_id, UpdateTicketStatusRequest ticketStatusUpdateRequest){
+        Ticket ticket = ticketRepository.getById(t_id);
+        ticket.setStatus(ticketStatusUpdateRequest.getStatus());
+        ticketRepository.save(ticket);
     }
 }

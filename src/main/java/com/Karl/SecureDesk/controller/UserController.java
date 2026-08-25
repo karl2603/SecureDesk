@@ -2,6 +2,7 @@ package com.Karl.SecureDesk.controller;
 
 import com.Karl.SecureDesk.dto.RegisterUserRequest;
 import com.Karl.SecureDesk.dto.TicketResponse;
+import com.Karl.SecureDesk.dto.UpdateTicketStatusRequest;
 import com.Karl.SecureDesk.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,16 @@ public class UserController {
     @GetMapping("/tickets")
     public List<TicketResponse> getTickets(){
         return userService.getTickets();
+    }
+
+    @GetMapping("/tickets/active")
+    public List<TicketResponse> getActiveTickets(){
+        return userService.getActiveTickets()
+    }
+
+    @PutMapping("/ticket/{t_id}/status")
+    public ResponseEntity<String> resolveTicket(@PathVariable("t_id") Long t_id,@Valid @RequestBody UpdateTicketStatusRequest ticketStatusUpdateRequest){
+        userService.resolveTicket(t_id, ticketStatusUpdateRequest);
+        return new ResponseEntity<>("Ticket id = "+t_id+" Status Updated", HttpStatus.OK);
     }
 }
