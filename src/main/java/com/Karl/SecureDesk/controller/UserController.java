@@ -1,12 +1,15 @@
 package com.Karl.SecureDesk.controller;
 
 import com.Karl.SecureDesk.dto.RegisterUserRequest;
+import com.Karl.SecureDesk.dto.TicketResponse;
 import com.Karl.SecureDesk.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/SecureDesk")
@@ -29,5 +32,11 @@ public class UserController {
     public ResponseEntity<RegisterUserRequest> registerUser(@Valid @RequestBody RegisterUserRequest registerUserRequest){
         userService.registerUser(registerUserRequest);
         return new ResponseEntity<>(registerUserRequest, HttpStatus.CREATED);
+    }
+
+    //Admin Features
+    @GetMapping("/tickets")
+    public List<TicketResponse> getTickets(){
+        return userService.getTickets();
     }
 }
