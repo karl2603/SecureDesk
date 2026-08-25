@@ -41,7 +41,7 @@ public class TicketService {
     }
 
     public void editTicket(EditTicketRequest editRequest, Long t_id){
-        Ticket ticket = ticketRepository.getById(t_id);
+        Ticket ticket = ticketRepository.findById(t_id).orElseThrow(()-> new RuntimeException("Ticket Not Found"));
         ticket.setTitle(editRequest.getTitle());
         ticket.setDescription(editRequest.getDescription());
         ticket.setLastUpdatedAt(LocalDateTime.now());
