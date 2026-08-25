@@ -43,7 +43,7 @@ public class UserController {
 
     @GetMapping("/tickets/active")
     public List<TicketResponse> getActiveTickets(){
-        return userService.getActiveTickets()
+        return userService.getActiveTickets();
     }
 
     @PutMapping("/ticket/{t_id}/status")

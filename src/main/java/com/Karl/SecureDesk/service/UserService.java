@@ -46,6 +46,17 @@ public class UserService {
         return response;
     }
 
+    public List<TicketResponse> getActiveTickets(){
+        List<Ticket> tickets = ticketRepository.findActiveTickets();
+        List<TicketResponse> response = new ArrayList<TicketResponse>();
+        for(int i=0; i<tickets.size(); i++){
+            Ticket ticket = tickets.get(i);
+            TicketResponse ticketResponse = new TicketResponse(ticket.getT_id(), ticket.getTitle(), ticket.getDescription(), ticket.getStatus());
+            response.add(ticketResponse);
+        }
+        return response;
+    }
+
     public void resolveTicket(Long t_id, UpdateTicketStatusRequest ticketStatusUpdateRequest){
         Ticket ticket = ticketRepository.getById(t_id);
         ticket.setStatus(ticketStatusUpdateRequest.getStatus());
