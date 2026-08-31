@@ -8,6 +8,9 @@ import com.Karl.SecureDesk.entity.User;
 import com.Karl.SecureDesk.repository.TicketRepository;
 import com.Karl.SecureDesk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,9 @@ public class UserService {
     @Autowired
     private TicketRepository ticketRepository;
 
+    @Autowired
+    AuthenticationManager authManager;
+
     private final BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
     public void registerUser(RegisterUserRequest registerUserRequest){
@@ -33,6 +39,12 @@ public class UserService {
         user.setRole("USER");
         user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
+    }
+
+    public String login(RegisterUserRequest userRequest){
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword()));
+        if(authentication.isAuthenticated()) return "Login Success";
+        return "Login Failed";
     }
 
     public List<TicketResponse> getTickets(){

@@ -18,21 +18,29 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
     //Can be accessed by all
     @GetMapping("/home")
     public String home(){
         return "Welcome Home, Create account to raise ticket!";
     }
+
     //Can only be accessed by users
     @GetMapping("/welcomeHome")
     public String welcomeHome(){
         return "Welcome Home, Raise, View, Update Tickets!";
     }
+
     //Can be accessed by all
     @PostMapping("/users/register")
     public ResponseEntity<RegisterUserRequest> registerUser(@Valid @RequestBody RegisterUserRequest registerUserRequest){
         userService.registerUser(registerUserRequest);
         return new ResponseEntity<>(registerUserRequest, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public String login(@Valid @RequestBody RegisterUserRequest userRequest){
+        return userService.login(userRequest);
     }
 
     //Admin Features

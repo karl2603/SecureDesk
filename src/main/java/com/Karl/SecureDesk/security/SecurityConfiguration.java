@@ -2,21 +2,30 @@ package com.Karl.SecureDesk.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfiguration {
+
     //Authentication Provider, DaoAuthenticationProvider
     @Bean
     public AuthenticationProvider authenticationProvider(MyUserDetailsService userDetailsService){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
         return provider;
+    }
+
+    //Authentication Manager
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig){
+        return authConfig.getAuthenticationManager();
     }
 
     // Security Filter Chain
@@ -32,7 +41,8 @@ public class SecurityConfiguration {
                         // Public endpoints, it can be accessed by all
                         .requestMatchers(
                                 "/SecureDesk/home",
-                                "/SecureDesk/users/register"
+                                "/SecureDesk/users/register",
+                                "/SecureDesk/login"
                         ).permitAll()
 
                         // Admin-only endpoints, can only be accessed by admin
