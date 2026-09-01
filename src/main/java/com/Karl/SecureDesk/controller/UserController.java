@@ -1,5 +1,6 @@
 package com.Karl.SecureDesk.controller;
 
+import com.Karl.SecureDesk.dto.LoginRequest;
 import com.Karl.SecureDesk.dto.RegisterUserRequest;
 import com.Karl.SecureDesk.dto.TicketResponse;
 import com.Karl.SecureDesk.dto.UpdateTicketStatusRequest;
@@ -39,8 +40,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid @RequestBody RegisterUserRequest userRequest){
-        return userService.login(userRequest);
+    public String login(@Valid @RequestBody LoginRequest loginRequest){
+        return userService.login(loginRequest);
     }
 
     //Admin Features

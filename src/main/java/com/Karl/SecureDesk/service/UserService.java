@@ -1,5 +1,6 @@
 package com.Karl.SecureDesk.service;
 
+import com.Karl.SecureDesk.dto.LoginRequest;
 import com.Karl.SecureDesk.dto.RegisterUserRequest;
 import com.Karl.SecureDesk.dto.TicketResponse;
 import com.Karl.SecureDesk.dto.UpdateTicketStatusRequest;
@@ -27,7 +28,10 @@ public class UserService {
     private TicketRepository ticketRepository;
 
     @Autowired
-    AuthenticationManager authManager;
+    private AuthenticationManager authManager;
+
+    @Autowired
+    private JwtService jwtService;
 
     private final BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
@@ -41,10 +45,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public String login(RegisterUserRequest userRequest){
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword()));
-        if(authentication.isAuthenticated()) return "Login Success";
-        return "Login Failed";
+    public String login(LoginRequest loginRequest){
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+        Authentication authentication = authManager.authenticate(authRequest);
+        if(authentication.isAuthenticated()) return jwtService.generateToken(loginRequest.getUsername());
+        else return "User not authenticated";
     }
 
     public List<TicketResponse> getTickets(){
