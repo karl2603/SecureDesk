@@ -2,6 +2,7 @@ package com.Karl.SecureDesk.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -31,7 +32,19 @@ public class JwtService {
                 .getSubject();
     }
 
-    public boolean validateToken(){
-        return true;
+    public boolean validateToken(String token, UserDetails userDetails){
+        String username = extractUserName(token);
+        return username.equals(userDetails.getUsername()) && !isExpired(token);
+    }
+
+    public boolean isExpired(String token){
+        Date expiration = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getExpiration();
+
+        return expiration.before(new Date());
     }
 }
